@@ -12,8 +12,8 @@ class Usuario {
         this.cedula = cedula ? cedula : ''
         this.ciudad = ciudad ? ciudad : ''
         this.fechaNacimiento = fechaNacimiento ? fechaNacimiento : null
-        this.datosUbicacion = datosUbicacion ? datosUbicacion : null
-        this.datosTelefono = datosTelefono ? datosTelefono : null
+        this.datosUbicacion = datosUbicacion ? datosUbicacion : []
+        this.datosTelefono = datosTelefono ? datosTelefono : []
         this.rol = rol ? rol : ''
     }
 
@@ -73,12 +73,12 @@ class Usuario {
         return this
     }
 
-    setDatosUbicacion ( datosUbicacion = null) {
+    setDatosUbicacion ( datosUbicacion = []) {
         this.datosUbicacion = datosUbicacion
         return this
     }
 
-    setDatosTelefono ( datosTelefono = null) {
+    setDatosTelefono ( datosTelefono = []) {
         this.datosTelefono = datosTelefono
         return this
     }
@@ -99,8 +99,9 @@ class Usuario {
     }
 
     static async obtenerUsuarioPorUID ( uid = '' ) {
-        const usuario = new Usuario()
-        await usuario.importarDatosUsuarioPorUID(uid)
+        
+        let usuarioDoc = await db.collection(COLECCION_USUARIO).doc(uid).get()
+        const usuario = new Usuario(usuarioDoc.data())
 
         return usuario
     }
