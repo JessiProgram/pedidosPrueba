@@ -6,13 +6,19 @@
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "feProd": "npm run environmentProd && cd .. && firebase emulators:start --only functions",
+    "fe": "npm run environmentDev && cd .. && firebase emulators:start --only hosting,functions,firestore,auth,ui --import=./emulator-data --export-on-exit=./emulator-data",
+    "environmentProd": "firebase functions:config:set environment.mode=production && firebase functions:config:get > config.json && firebase functions:config:get",
+    "environmentDev": "firebase functions:config:set environment.mode=development && firebase functions:config:get > config.json && firebase functions:config:get"
   },
   "engines": {
     "node": "16"
   },
   "main": "index.js",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^3.18.0"
   },

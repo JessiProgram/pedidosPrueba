@@ -9,7 +9,7 @@ class Producto {
 
     constructor (datosUsuario = {}) {
         const { uid, nombre, cantidad, detalles, urlImagenes, datosPrecio} = datosUsuario
-        this.uid = uid ? uid : ''
+        this.uid = uid ? uid : db.collection(COLECCION_PRODUCTO).doc().id
         this.nombre = nombre ? nombre : ''
         this.cantidad = cantidad ? cantidad : 0
         this.detalles = detalles ? detalles : ''
@@ -83,7 +83,7 @@ class Producto {
     static async obtenerProductoPorUID ( uid = '' ) {
 
         let productoDoc = await db.collection(COLECCION_PRODUCTO).doc(uid).get()
-        const producto = new Usuario(productoDoc.data())
+        const producto = new Producto(productoDoc.data())
 
         return producto
     }
@@ -93,7 +93,7 @@ class Producto {
         return !!datosActualizados 
     }
 
-    static eliminarProducto(uid = ''){
+    static async eliminarProducto(uid = ''){
         return await db.collection(COLECCION_PRODUCTO).doc(uid).delete()
     }
 
