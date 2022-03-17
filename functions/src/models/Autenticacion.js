@@ -1,7 +1,6 @@
-const config = require('../../../config')
-const admin = require('../../../firebase-service')
+const admin = require('../../firebase-service')
 const Usuario = require('./Usuario')
-const db = require('../../../db')
+const db = require('../../db')
 
 const COLECCION_USUARIO = 'Usuarios'
 
@@ -31,6 +30,8 @@ class Authentication {
         })
 
         this.uid = usuarioAuthNuevo.uid
+
+        console.log("fin")
 
         return usuarioAuthNuevo.uid
     }

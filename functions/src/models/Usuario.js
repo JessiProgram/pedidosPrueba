@@ -1,14 +1,14 @@
 const admin = require('../../firebase-service')
 const db = require('../../db')
 
-const COLECCION_PRODUCTO = 'Usuarios'
+const COLECCION_USUARIO = 'Usuarios'
 
 class Usuario {
 
     constructor (datosUsuario = {}) {
         const { uid, nombreCompleto, correo, cedula, ciudad, fechaNacimiento, datosUbicacion,
             datosTelefono, rol} = datosUsuario
-        this.uid = uid ? uid : db.collection(COLECCION_PRODUCTO).doc().id
+        this.uid = uid ? uid : db.collection(COLECCION_USUARIO).doc().id
         this.nombreCompleto = nombreCompleto ? nombreCompleto : ''
         this.correo = correo ? correo : ''
         this.cedula = cedula ? cedula : ''

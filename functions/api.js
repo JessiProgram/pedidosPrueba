@@ -9,6 +9,7 @@ app.use(express.urlencoded({
 }))
 
 app.use('/productos', require('./src/routes/producto'))
+app.use('/usuarios', require('./src/routes/usuario'))
 
 
 app.use((err, req, res, next) => {

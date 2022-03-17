@@ -7,10 +7,10 @@ const controller = {}
 controller.crearProducto = async (req, res) => {
     try {
         const { body } = req
-        const { datosProducto } = body
+        const { nombre, detalles, datosPrecio } = body
 
 
-        const producto = new Producto(datosProducto)
+        const producto = new Producto(body)
 
         Producto.agregarProducto(producto)
 
@@ -31,8 +31,8 @@ controller.crearProducto = async (req, res) => {
 
 controller.leerProducto = async (req, res) => {
     try {
-        const { body } = req
-        const { uid } = body
+        const { body, params, pedidosDatos } = req
+        const { uid } = params
 
         const producto = await Producto.obtenerProductoPorUID(uid)
 
@@ -53,8 +53,10 @@ controller.leerProducto = async (req, res) => {
 
 controller.actualizarProducto = async (req, res) => {
     try {
-        const { body } = req
-        const { uid, datosActualizados } = body
+        const { body, params, pedidosDatos } = req
+        const { datosActualizados } = body
+        const { uid } = params
+
 
         const actualizadoCorrecto = Producto.actualizarProducto(uid, datosActualizados)
 
@@ -75,8 +77,8 @@ controller.actualizarProducto = async (req, res) => {
 
 controller.eliminarProducto = async (req, res) => {
     try {
-        const { body } = req
-        const { uid } = body
+        const { body, params, pedidosDatos, } = req
+        const { uid } = params
 
         const producto = await Producto.eliminarProducto(uid)
 

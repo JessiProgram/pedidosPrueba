@@ -8,10 +8,9 @@ const COLECCION_PRODUCTO = 'Productos'
 class Producto {
 
     constructor (datosUsuario = {}) {
-        const { uid, nombre, cantidad, detalles, urlImagenes, datosPrecio} = datosUsuario
+        const { uid, nombre, detalles, urlImagenes, datosPrecio} = datosUsuario
         this.uid = uid ? uid : db.collection(COLECCION_PRODUCTO).doc().id
         this.nombre = nombre ? nombre : ''
-        this.cantidad = cantidad ? cantidad : 0
         this.detalles = detalles ? detalles : ''
         this.urlImagenes = urlImagenes ? urlImagenes : []
         this.datosPrecio = datosPrecio ? datosPrecio : new DatosPrecio()
@@ -21,7 +20,6 @@ class Producto {
         return {
             uid: this.uid,
             nombre: this.nombre,
-            cantidad: this.cantidad,
             detalles: this.detalles,
             urlImagenes: this.urlImagenes,
         }
@@ -30,7 +28,6 @@ class Producto {
     setDatosUsuario (datosUsuario) {
         this.setUid(datosUsuario.uid)
         this.setNombre(datosUsuario.nombre)
-        this.setCantidad(datosUsuario.cantidad)
         this.setDetalles(datosUsuario.detalles)
         this.setUrlImagenes(datosUsuario.urlImagenes)
         this.setDatosPrecio(datosUsuario.datosPrecio)
@@ -43,11 +40,6 @@ class Producto {
 
     setNombre ( nombre = '' ) {
         this.nombre = nombre
-        return this
-    }
-
-    setCantidad (cantidad = 0) {
-        this.cantidad = cantidad
         return this
     }
 
@@ -76,7 +68,7 @@ class Producto {
     //
 
     static agregarProducto(producto = new Producto()){
-        db.collection(COLECCION_PRODUCTO).doc(producto.iud).set(producto.getDatosProducto())
+        db.collection(COLECCION_PRODUCTO).doc(producto.uid).set(producto.getDatosProducto())
         return true
     }
 
