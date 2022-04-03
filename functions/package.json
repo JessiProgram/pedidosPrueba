@@ -2,14 +2,11 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "scripts": {
-    "serve": "firebase emulators:start --only functions",
+    "serve": "npm run environmentDev && firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
-    "serveProd": "npm run environmentProd && cd .. && firebase emulators:start --only functions,ui",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "feProd": "npm run environmentProd && cd .. && firebase emulators:start --only functions",
-    "fe": "npm run environmentDev && cd .. && firebase emulators:start --only hosting,functions,firestore,auth,ui --import=./emulator-data --export-on-exit=./emulator-data",
     "environmentProd": "firebase functions:config:set environment.mode=production && firebase functions:config:get > config.json && firebase functions:config:get",
     "environmentDev": "firebase functions:config:set environment.mode=development && firebase functions:config:get > config.json && firebase functions:config:get"
   },

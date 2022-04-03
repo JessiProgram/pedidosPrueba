@@ -1,25 +1,24 @@
 const admin = require('../../firebase-service')
 const db = require('../../db')
 
-const COLECCION_USUARIO = 'Usuarios'
+const COLECCION = 'Usuarios'
 
 class Usuario {
 
     constructor (datosUsuario = {}) {
-        const { uid, nombreCompleto, correo, cedula, ciudad, fechaNacimiento, datosUbicacion,
-            datosTelefono, rol} = datosUsuario
-        this.uid = uid ? uid : db.collection(COLECCION_USUARIO).doc().id
+        const { uid, nombreCompleto, correo, cedula, ciudad, fechaNacimiento, datosTelefono, rol} = datosUsuario
+
+        this.uid = uid ? uid : db.collection(COLECCION).doc().id
         this.nombreCompleto = nombreCompleto ? nombreCompleto : ''
         this.correo = correo ? correo : ''
         this.cedula = cedula ? cedula : ''
         this.ciudad = ciudad ? ciudad : ''
         this.fechaNacimiento = fechaNacimiento ? fechaNacimiento : null
-        this.datosUbicacion = datosUbicacion ? datosUbicacion : []
         this.datosTelefono = datosTelefono ? datosTelefono : []
-        this.rol = rol ? rol : ''
+        this.rol = rol ? rol : 'cliente'
     }
 
-    getDatosUsuario () {
+    getUsuario () {
         return {
             uid: this.uid,
             nombreCompleto: this.nombreCompleto,
@@ -27,20 +26,18 @@ class Usuario {
             cedula: this.cedula,
             ciudad: this.ciudad,
             fechaNacimiento: this.fechaNacimiento,
-            datosUbicacion: this.datosUbicacion,
             datosTelefono: this.datosTelefono,
             rol: this.rol,
         }
     }
 
-    setDatosUsuario (datosUsuario) {
+    setUsuario (datosUsuario) {
         this.setUid(datosUsuario.uid)
         this.setNombreCompleto(datosUsuario.nombreCompleto)
         this.setCorreo(datosUsuario.correo)
         this.setCedula(datosUsuario.cedula)
         this.setCiudad(datosUsuario.ciudad)
         this.setFechaNacimiento(datosUsuario.fechaNacimiento)
-        this.setDatosUbicacion(datosUsuario.datosUbicacion)
         this.setDatosTelefono(datosUsuario.datosTelefono)
         this.setRol(datosUsuario.rol)
     }
@@ -65,27 +62,22 @@ class Usuario {
         return this
     }
 
-    setCiudad ( ciudad = '') {
+    setCiudad ( ciudad = '' ) {
         this.ciudad = ciudad
         return this
     }
 
-    setFechaNacimiento ( fechaNacimiento = null) {
+    setFechaNacimiento ( fechaNacimiento = null ) {
         this.fechaNacimiento = fechaNacimiento
         return this
     }
 
-    setDatosUbicacion ( datosUbicacion = []) {
-        this.datosUbicacion = datosUbicacion
-        return this
-    }
-
-    setDatosTelefono ( datosTelefono = []) {
+    setDatosTelefono ( datosTelefono = [] ) {
         this.datosTelefono = datosTelefono
         return this
     }
 
-    setRol ( rol = '') {
+    setRol ( rol = 'cliente' ) {
         this.rol = rol
         return this
     }
@@ -93,29 +85,33 @@ class Usuario {
     /**
      * Metodos Estaticos
     */
-     static async crearUsuario ( usuario = new Usuario() ) {
+    static async crearUsuario ( usuario = new Usuario() ) {
         // Crear los datos en firestore para el nuevo usuario
-        db.collection(COLECCION_USUARIO).doc(usuario.uid).set(usuario.getDatosUsuario())
+        db.collection(COLECCION).doc(usuario.uid).set(usuario.getUsuario())
 
         return true
     }
 
     static async obtenerUsuarioPorUID ( uid = '' ) {
         
-        let usuarioDoc = await db.collection(COLECCION_USUARIO).doc(uid).get()
+        let usuarioDoc = await db.collection(COLECCION).doc(uid).get()
         const usuario = new Usuario(usuarioDoc.data())
 
         return usuario
     }
 
-    static async actalizarUsuarioPorUID ( uidUsuario = '', datosActualizados = null ) {
+    static async actalizarUsuarioPorUID ( uidUsuario = '', datosActualizados = {} ) {
         // Actualizar los datos de firestore del usuario
-        if (datosActualizados) db.collection(COLECCION_USUARIO).doc(uidUsuario).update(datosActualizados)
-        return !!datosActualizados 
+        let existe = !!Object.keys(datosActualizados).length
+        
+        if (existe) 
+            db.collection(COLECCION).doc(uidUsuario).update(datosActualizados)
+        
+        return existe
     }
 
     static async eliminarUsuarioPorUID ( uidUsuario = '' ) {
-        return await db.collection(COLECCION_USUARIO).doc(uidUsuario).delete()
+        return await db.collection(COLECCION).doc(uidUsuario).delete()
     }
 }
 

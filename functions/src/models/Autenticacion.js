@@ -25,13 +25,11 @@ class Authentication {
         })
 
         // Crear los reclamos de autenticacion para el nuevo usuario
-        admin.auth().setCustomUserClaims(usuarioAuthNuevo.uid, {
+        await admin.auth().setCustomUserClaims(usuarioAuthNuevo.uid, {
             rol: usuario.rol,
         })
 
         this.uid = usuarioAuthNuevo.uid
-
-        console.log("fin")
 
         return usuarioAuthNuevo.uid
     }

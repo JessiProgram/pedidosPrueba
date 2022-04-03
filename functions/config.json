@@ -1,5 +1,5 @@
 {
   "environment": {
-    "mode": "production"
+    "mode": "development"
   }
 }

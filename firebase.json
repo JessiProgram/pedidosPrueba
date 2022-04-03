@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "pedidosprueba",
     "public": "public",
     "ignore": [
       "firebase.json",
@@ -12,12 +13,15 @@
   },
   "emulators": {
     "functions": {
+      "enabled": true,
       "port": 5001
     },
     "firestore": {
+      "enabled": false,
       "port": 8080
     },
     "hosting": {
+      "enabled": false,
       "port": 5000
     },
     "ui": {

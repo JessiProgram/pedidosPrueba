@@ -1,12 +1,12 @@
 const getAuthToken = (req, res, next) => {
     const { authorization } = req.headers
 
-    req.pedidosDatos = req.pedidosDatos ? req.pedidosDatos : {}
+    req.otrosDatos = req.otrosDatos ? req.otrosDatos : {}
 
     if(authorization && authorization.split(' ')[0] === 'Bearer'){
-        req.pedidosDatos.authToken = authorization.split(' ')[1]
+        req.otrosDatos.authToken = authorization.split(' ')[1]
     }else{
-        req.pedidosDatos.authToken = null
+        req.otrosDatos.authToken = null
     }
 
     next()

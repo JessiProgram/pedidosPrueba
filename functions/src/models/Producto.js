@@ -7,33 +7,57 @@ const COLECCION_PRODUCTO = 'Productos'
 
 class Producto {
 
-    constructor (datosUsuario = {}) {
-        const { uid, nombre, detalles, urlImagenes, datosPrecio} = datosUsuario
+    constructor (datos = {}) {
+        const { 
+            uid, 
+            nombre, 
+            idReferencia,
+            descripcion, 
+            categoria,
+            subCategoria,
+            urlImagenes, 
+            datosPrecio,
+            habilitado
+        } = datos
+
         this.uid = uid ? uid : db.collection(COLECCION_PRODUCTO).doc().id
         this.nombre = nombre ? nombre : ''
-        this.detalles = detalles ? detalles : ''
+        this.idReferencia = idReferencia ? idReferencia : ''
+        this.descripcion = descripcion ? descripcion : ''
         this.urlImagenes = urlImagenes ? urlImagenes : []
+        this.categoria = categoria ? categoria : ''
+        this.subCategoria = subCategoria ? subCategoria : ''
         this.datosPrecio = datosPrecio ? datosPrecio : new DatosPrecio()
+        this.habilitado = habilitado !== undefined ? habilitado : false
     }
 
-    getDatosProducto () {
+    getProducto () {
         return {
             uid: this.uid,
             nombre: this.nombre,
-            detalles: this.detalles,
+            idReferencia: this.idReferencia,
+            descripcion: this.descripcion,
             urlImagenes: this.urlImagenes,
+            categoria: this.categoria,
+            subCategoria: this.subCategoria,
+            datosPrecio: this.datosPrecio.getDatosPrecio(),
+            habilitado: this.habilitado,
         }
     }
 
-    setDatosUsuario (datosUsuario) {
-        this.setUid(datosUsuario.uid)
-        this.setNombre(datosUsuario.nombre)
-        this.setDetalles(datosUsuario.detalles)
-        this.setUrlImagenes(datosUsuario.urlImagenes)
-        this.setDatosPrecio(datosUsuario.datosPrecio)
+    setProducto (datos) {
+        this.setUid(datos.uid)
+        this.setNombre(datos.nombre)
+        this.setIdReferencia(datos.idReferencia)
+        this.setDescripcion(datos.descripcion)
+        this.setUrlImagenes(datos.urlImagenes)
+        this.setCategoria(datos.categoria)
+        this.setSubCategoria(datos.subCategoria)
+        this.setDatosPrecio(datos.datosPrecio)
+        this.setHabilitado(datos.habilitado)
     }
 
-    setUid (uid = '') {
+    setUid (uid = '' ) {
         this.uid = uid
         return this
     }
@@ -43,23 +67,38 @@ class Producto {
         return this
     }
 
-    setCosto ( costo = 0 ) {
-        this.costo = costo
+    setIdReferencia ( idReferencia = '' ) {
+        this.idReferencia = idReferencia
         return this
     }
 
-    setDetalles ( detalles = '') {
-        this.detalles = detalles
+    setDescripcion ( descripcion = '' ) {
+        this.descripcion = descripcion
         return this
     }
 
-    setUrlImagenes ( urlImagenes = []) {
+    setUrlImagenes ( urlImagenes = [] ) {
         this.urlImagenes = urlImagenes
         return this
     }
 
-    setDatosPrecio ( datosPrecio = new DatosPrecio()) {
+    setCategoria ( categoria = '' ) {
+        this.categoria = categoria
+        return this
+    }
+
+    setSubCategoria ( subCategoria = '' ) {
+        this.subCategoria = subCategoria
+        return this
+    }
+
+    setDatosPrecio ( datosPrecio = new DatosPrecio() ) {
         this.datosPrecio = datosPrecio
+        return this
+    }
+
+    setHabilitado ( habilitado = false ) {
+        this.habilitado = habilitado
         return this
     }
 
@@ -68,20 +107,23 @@ class Producto {
     //
 
     static agregarProducto(producto = new Producto()){
-        db.collection(COLECCION_PRODUCTO).doc(producto.uid).set(producto.getDatosProducto())
+        await db.collection(COLECCION_PRODUCTO).doc(producto.uid).set(producto.getDatosProducto())
         return true
     }
 
     static async obtenerProductoPorUID ( uid = '' ) {
 
         let productoDoc = await db.collection(COLECCION_PRODUCTO).doc(uid).get()
+
+        if (!productoDoc.exists) return null
+
         const producto = new Producto(productoDoc.data())
 
         return producto
     }
 
-    static actualizarProducto(uid = '', datosActualizados = null ){
-        if (datosActualizados) db.collection(COLECCION_PRODUCTO).doc(uid).update(datosActualizados)
+    static actualizarProducto(uid = '', datosActualizados = {} ){
+        if (datosActualizados) await db.collection(COLECCION_PRODUCTO).doc(uid).update(datosActualizados)
         return !!datosActualizados 
     }
 
